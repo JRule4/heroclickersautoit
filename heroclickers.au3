@@ -1,5 +1,5 @@
 
-Global $maxLevel = 1600
+Global $maxLevel = 2075
 Global $counter
 Global $Paused
 Global $coord = 0
@@ -14,7 +14,7 @@ HotKeySet("q", "Terminate")
 Local $hWnd = WinWait("[REGEXPTITLE:.* - Clicker Heroes - .*]", "", 10)
 Global $controlID = 148896680
 Local $title
-Global $currentLevel
+Global $currentLevel = 0
 
 While True
    
@@ -25,10 +25,20 @@ While True
    EndIf
    
    Sleep(10)
-   If Mod($coord, 500) == 0 Then ; level treebeast
+   If Mod($coord, 500) == 0  Then ; level active hero
+	  If $currentLevel < 1520 Then
+		 MouseClick("left", 938, 427, 1) ; go to top of list
+	  ElseIf $currentLevel > 1800 Then
+		 MouseWheel("down")
+		 MouseClick("left", 934, 404, 1) ;scroll list up slightly so we can click on lill
+	  EndIf ; otherwise we stay at the bottom
 	  Send("{z DOWN}")	  
 	  Sleep(10)
-	  MouseClick("left",450,550,3,1)
+	  If $currentLevel < 1520 Then
+		 MouseClick("left",450,550,3,1)
+	  Else 
+		 MouseClick("left",450,450,3,1)
+	  EndIf
 	  Send("{z UP}")	  
    EndIf
    
@@ -101,9 +111,9 @@ Func LevelHeroes()
 	  Mouseclick("left", 700, 800, 1)
 	  
 	  ;level treebeast and lowest heroes as much as possible
-	  	  
-	  MouseClick("left", 938, 427, 1) ; go to top of list
-	  If $upgraded < 5 Then
+	  
+	  If $upgraded < 5 and $currentLevel < 1520 Then
+		 MouseClick("left", 938, 427, 1) ; go to top of list
 		 Sleep(100)
 		 Local $scrollClicks = 0
 		 While $scrollClicks < 8		 	  
